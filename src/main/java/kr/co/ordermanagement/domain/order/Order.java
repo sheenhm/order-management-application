@@ -51,8 +51,7 @@ public class Order {
     }
 
     public void cancel() {
-        if (!this.state.equals(CREATED))
-            throw new NotCancellableStateException("이미 취소되었거나 취소할 수 없는 주문상태입니다.");
+        this.state.checkCancellable();
         this.state = CANCELED;
     }
 
