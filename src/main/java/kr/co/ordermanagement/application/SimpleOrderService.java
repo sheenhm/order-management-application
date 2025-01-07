@@ -2,6 +2,7 @@ package kr.co.ordermanagement.application;
 
 import kr.co.ordermanagement.domain.order.Order;
 import kr.co.ordermanagement.domain.order.OrderRepository;
+import kr.co.ordermanagement.domain.order.OrderedProduct;
 import kr.co.ordermanagement.domain.order.State;
 import kr.co.ordermanagement.domain.product.Product;
 import kr.co.ordermanagement.domain.product.ProductRepository;
@@ -27,7 +28,7 @@ public class SimpleOrderService {
     }
 
     public OrderResponseDto order(List<OrderRequestDto> orderRequestDto) {
-        List<Product> orderedProducts = makeOrderedProducts(orderRequestDto);
+        List<OrderedProduct> orderedProducts = makeOrderedProducts(orderRequestDto);
         decreaseProductAmount(orderedProducts);
 
         Order order = new Order(orderedProducts);
@@ -68,7 +69,7 @@ public class SimpleOrderService {
         return OrderResponseDto.toDto(order);
     }
 
-    private List<Product> makeOrderedProducts(List<OrderRequestDto> orderRequestDtos) {
+    private List<OrderedProduct> makeOrderedProducts(List<OrderRequestDto> orderRequestDtos) {
         return orderRequestDtos.stream()
                 .map(orderRequestDto -> {
                     Long productId = orderRequestDto.getId();
@@ -77,7 +78,7 @@ public class SimpleOrderService {
                     Integer orderedAmount = orderRequestDto.getAmount();
                     product.checkEnoughAmount(orderedAmount);
 
-                    return new Product(
+                    return new OrderedProduct(
                             productId,
                             product.getName(),
                             product.getPrice(),
@@ -86,7 +87,7 @@ public class SimpleOrderService {
                 }).toList();
     }
 
-    private void decreaseProductAmount(List<Product> orderedProducts) {
+    private void decreaseProductAmount(List<OrderedProduct> orderedProducts) {
         orderedProducts.stream()
                 .forEach(orderedProduct -> {
                     Long productId = orderedProduct.getId();

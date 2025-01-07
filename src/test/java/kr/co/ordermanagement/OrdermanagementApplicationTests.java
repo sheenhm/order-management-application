@@ -326,7 +326,7 @@ class OrdermanagementApplicationTests {
 				.andExpect(status().isInternalServerError())
 				.andExpect(content().json("""
 						{
-						    "message": "이미 취소되었거나 취소할 수 없는 주문상태입니다."
+						    "message": "이미 취소되었거나, 취소할 수 없는 주문상태입니다."
 						}
 						"""));
 	}
